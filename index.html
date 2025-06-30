@@ -1392,56 +1392,23 @@
           (query, filters) => {
             filters = filters || {}; // Ensure filters object exists
             const normalizedQuery = query ? query.toLowerCase().trim() : "";
-            const normalizedTagQuery = filters.tag
-              ? filters.tag.toLowerCase().trim()
-              : ""; // For exact tag matching
 
             return recipes.filter((recipe) => {
               // Basic check for valid recipe object
               if (!recipe || typeof recipe.name !== "string") return false;
 
-              // --- Query Matching ---
+              // --- Query Matching (ONLY by name or type) ---
               let matchesQuery = !normalizedQuery; // True if query is empty
               if (normalizedQuery) {
                 const nameMatch = recipe.name
                   .toLowerCase()
                   .includes(normalizedQuery);
-                const descriptionMatch = recipe.description // Search description too
-                  ?.toLowerCase()
-                  .includes(normalizedQuery);
-                const ingredientMatch = recipe.ingredients?.some(
-                  (ing) =>
-                    typeof ing === "string" &&
-                    ing.toLowerCase().includes(normalizedQuery)
-                );
                 const typeMatch = recipe.type
                   ?.toLowerCase()
                   .includes(normalizedQuery);
-                const dietaryMatch = recipe.dietaryTypes?.some(
-                  (type) =>
-                    typeof type === "string" &&
-                    type.toLowerCase().includes(normalizedQuery)
-                );
-                const tagMatch = recipe.tags?.some(
-                  (tag) =>
-                    typeof tag === "string" &&
-                    tag.toLowerCase().includes(normalizedQuery)
-                );
-                const tipsMatch = recipe.tipsAndTricks?.some(
-                  (tip) =>
-                    typeof tip === "string" &&
-                    tip.toLowerCase().includes(normalizedQuery)
-                );
 
-                // Default: search across multiple fields including description
-                matchesQuery =
-                  nameMatch ||
-                  descriptionMatch || // Added description match
-                  ingredientMatch ||
-                  typeMatch ||
-                  dietaryMatch ||
-                  tagMatch ||
-                  tipsMatch;
+                // Only search by name or type
+                matchesQuery = nameMatch || typeMatch;
               }
 
               // --- Filter Matching ---
@@ -1452,6 +1419,9 @@
                 ? recipe.dietaryTypes?.includes(filters.dietaryType)
                 : true;
               // Tag filter requires exact match (case-insensitive)
+              const normalizedTagQuery = filters.tag
+                ? filters.tag.toLowerCase().trim()
+                : "";
               const matchesTag = normalizedTagQuery
                 ? recipe.tags?.some(
                     (tag) => tag.toLowerCase() === normalizedTagQuery
@@ -1824,7 +1794,7 @@
             // --- PDF Generation Options ---
             const opt = {
               margin: 0.5, // Margins in inches
-              filename: `${recipeName
+              filename: `${recipe.name
                 .toLowerCase()
                 .replace(/[^a-z0-9]+/g, "-")}-recipe.pdf`, // Sanitize filename
               image: { type: "jpeg", quality: 0.95 }, // Image settings
