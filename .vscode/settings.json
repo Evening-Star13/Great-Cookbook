@@ -1,9 +1,11 @@
 {
   "liveServer.settings.port": 5501,
   "cSpell.words": [
+    "appspot",
     "Carb",
     "Favs",
     "Fifications",
+    "firebaseapp",
     "Firestore",
     "FIRESTORE",
     "Fsvg",
@@ -13,6 +15,7 @@
     "overmix",
     "pagebreak",
     "Pescatarian",
+    "subcollection",
     "uncountables"
   ]
 }
