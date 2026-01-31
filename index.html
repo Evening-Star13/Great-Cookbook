@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -19,6 +19,108 @@
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.24.0/babel.min.js"></script>
     <style>
+      /* Card Hover Animation */
+      .recipe-card {
+        transition:
+          transform 0.18s cubic-bezier(0.4, 2, 0.6, 1),
+          box-shadow 0.18s cubic-bezier(0.4, 2, 0.6, 1);
+      }
+      .recipe-card:hover {
+        transform: scale(1.07) translateY(-8px);
+        box-shadow:
+          0 16px 48px 0 rgba(16, 185, 129, 0.18),
+          0 6px 24px 0 rgba(0, 0, 0, 0.16);
+        z-index: 3;
+      }
+      /* Tag Hover Effect */
+      .tag-hover {
+        transition:
+          background 0.18s,
+          color 0.18s;
+      }
+      .tag-hover:hover {
+        background: #a78bfa !important;
+        color: #fff !important;
+      }
+      .dark .tag-hover:hover {
+        background: #7c3aed !important;
+        color: #fff !important;
+      }
+      /* Modal Fade/Scale Animation */
+      .modal-fade {
+        animation: modalFadeIn 0.22s cubic-bezier(0.4, 2, 0.6, 1);
+      }
+      @keyframes modalFadeIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.96);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      /* Button Ripple Effect */
+      .ripple {
+        position: relative;
+        overflow: hidden;
+      }
+      .ripple:after {
+        content: "";
+        display: block;
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        width: 100px;
+        height: 100px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: rgba(16, 185, 129, 0.18);
+        animation: ripple-effect 0.5s linear;
+        opacity: 0;
+      }
+      .ripple:active:after {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        transition: 0s;
+      }
+      @keyframes ripple-effect {
+        to {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(2.5);
+        }
+      }
+      /* Card Entry Animation */
+      .card-appear {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+        animation: cardFadeIn 0.38s cubic-bezier(0.4, 2, 0.6, 1) forwards;
+      }
+      @keyframes cardFadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      /* Spinner */
+      .spinner {
+        border: 3px solid #e5e7eb;
+        border-top: 3px solid #10b981;
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        animation: spin 0.7s linear infinite;
+        margin: 2rem auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -85,7 +187,9 @@
       }
 
       .collapsible-content {
-        transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+        transition:
+          max-height 0.3s ease-out,
+          opacity 0.3s ease-out;
         overflow: hidden;
         max-height: 0;
         opacity: 0;
@@ -103,7 +207,9 @@
         display: inline-flex;
         align-items: center;
         font-size: 0.875rem;
-        transition: background-color 0.2s ease, color 0.2s ease;
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease;
         border: 1px solid transparent;
         white-space: nowrap;
       }
@@ -160,7 +266,9 @@
         border: 1px solid #d1d5db;
         background-color: #f9fafb;
         color: #111827;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
       }
       .modal-input,
       .modal-textarea {
@@ -280,18 +388,21 @@
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
+        line-clamp: 1;
       }
       .line-clamp-2 {
         overflow: hidden;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
       }
       .line-clamp-3 {
         overflow: hidden;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 3;
+        line-clamp: 3;
       }
 
       .tc {
@@ -1006,7 +1117,7 @@
           normalized.endsWith("s") &&
           !normalized.endsWith("ss") &&
           !["greens", "oats", "pasta", "rice", "hummus", "molasses"].includes(
-            normalized
+            normalized,
           ) &&
           normalized.length > 2
         ) {
@@ -1240,7 +1351,7 @@
                     } catch (updateError) {
                       console.warn(
                         `updateItem failed for ${storeName}, trying addItem:`,
-                        updateError
+                        updateError,
                       );
                       try {
                         await addItem(storeName, {
@@ -1250,7 +1361,7 @@
                       } catch (addError) {
                         console.error(
                           `Both updateItem and addItem failed for ${storeName}:`,
-                          addError
+                          addError,
                         );
                         throw addError;
                       }
@@ -1260,16 +1371,16 @@
                   localStorage.removeItem(storeName);
                   addToast(
                     `Migrated ${storeName} data from localStorage to IndexedDB!`,
-                    "info"
+                    "info",
                   );
                 } catch (migrationError) {
                   console.error(
                     `Error migrating ${storeName} from localStorage:`,
-                    migrationError
+                    migrationError,
                   );
                   addToast(
                     `Failed to migrate ${storeName} data. Using IndexedDB directly.`,
-                    "error"
+                    "error",
                   );
                 }
               }
@@ -1287,7 +1398,7 @@
                 } catch (error) {
                   console.error(
                     "Error loading meal plan from IndexedDB:",
-                    error
+                    error,
                   );
                   dataFromIndexedDB = null;
                 }
@@ -1351,12 +1462,12 @@
                   (storeName === STORE_NAMES.MEAL_PLAN &&
                     Object.keys(dataFromIndexedDB).length > 0)
                   ? dataFromIndexedDB
-                  : initialValue
+                  : initialValue,
               );
             } catch (error) {
               console.error(
                 `Error loading data from IndexedDB for ${storeName}:`,
-                error
+                error,
               );
               addToast(`Error loading ${storeName} data.`, "error");
               setStoredValue(initialValue);
@@ -1390,7 +1501,7 @@
                 } catch (updateError) {
                   console.warn(
                     `updateItem failed for ${storeName}, trying addItem:`,
-                    updateError
+                    updateError,
                   );
                   await addItem(storeName, {
                     id: storeName,
@@ -1408,12 +1519,12 @@
             } catch (error) {
               console.error(
                 `Error saving data to IndexedDB for ${storeName}:`,
-                error
+                error,
               );
               addToast(`Failed to save ${storeName} data.`, "error");
             }
           },
-          [storeName, addToast, storedValue]
+          [storeName, addToast, storedValue],
         );
 
         return [storedValue, setValue, isLoading];
@@ -1429,8 +1540,8 @@
           type === "success"
             ? "bg-green-500"
             : type === "error"
-            ? "bg-red-500"
-            : "bg-blue-500";
+              ? "bg-red-500"
+              : "bg-blue-500";
 
         return (
           <div
@@ -1449,8 +1560,9 @@
 
         const playSound = useCallback(() => {
           if (!audioContextRef.current) {
-            audioContextRef.current = new (window.AudioContext ||
-              window.webkitAudioContext)();
+            audioContextRef.current = new (
+              window.AudioContext || window.webkitAudioContext
+            )();
           }
           const oscillator = audioContextRef.current.createOscillator();
           const gainNode = audioContextRef.current.createGain();
@@ -1459,15 +1571,15 @@
           oscillator.type = "sine";
           oscillator.frequency.setValueAtTime(
             880,
-            audioContextRef.current.currentTime
+            audioContextRef.current.currentTime,
           );
           gainNode.gain.setValueAtTime(
             0.5,
-            audioContextRef.current.currentTime
+            audioContextRef.current.currentTime,
           );
           gainNode.gain.exponentialRampToValueAtTime(
             0.0001,
-            audioContextRef.current.currentTime + 1
+            audioContextRef.current.currentTime + 1,
           );
           oscillator.start(audioContextRef.current.currentTime);
           oscillator.stop(audioContextRef.current.currentTime + 1);
@@ -1495,7 +1607,7 @@
                 (t) =>
                   t.isRunning ||
                   t.remaining > 0 ||
-                  Date.now() - t.finishedAt < 300000
+                  Date.now() - t.finishedAt < 300000,
               );
             });
           }, 1000);
@@ -1518,14 +1630,14 @@
             ]);
             addToast(`Timer "${name}" started!`, "info");
           },
-          [addToast]
+          [addToast],
         );
 
         const toggleTimer = useCallback((id) => {
           setTimers((prev) =>
             prev.map((t) =>
-              t.id === id ? { ...t, isRunning: !t.isRunning } : t
-            )
+              t.id === id ? { ...t, isRunning: !t.isRunning } : t,
+            ),
           );
         }, []);
 
@@ -1536,8 +1648,10 @@
         const resetTimer = useCallback((id) => {
           setTimers((prev) =>
             prev.map((t) =>
-              t.id === id ? { ...t, remaining: t.duration, isRunning: true } : t
-            )
+              t.id === id
+                ? { ...t, remaining: t.duration, isRunning: true }
+                : t,
+            ),
           );
         }, []);
 
@@ -1627,7 +1741,7 @@
 
         const removeToast = useCallback((id) => {
           setToasts((prevToasts) =>
-            prevToasts.filter((toast) => toast.id !== id)
+            prevToasts.filter((toast) => toast.id !== id),
           );
         }, []);
 
@@ -1644,12 +1758,12 @@
             tipsAndTricks: r.tipsAndTricks || [],
             yield: r.yield || "",
           })),
-          addToast
+          addToast,
         );
         const [mealPlan, setMealPlan, isLoadingMealPlan] = usePersistentStorage(
           STORE_NAMES.MEAL_PLAN,
           {},
-          addToast
+          addToast,
         );
         const [shoppingList, setShoppingList, isLoadingShoppingList] =
           usePersistentStorage(STORE_NAMES.SHOPPING_LIST, [], addToast);
@@ -1745,7 +1859,7 @@
         const deleteAllRecipes = useCallback(async () => {
           if (
             !window.confirm(
-              "Are you sure you want to delete ALL recipes, meal plans, and shopping list? This cannot be undone!"
+              "Are you sure you want to delete ALL recipes, meal plans, and shopping list? This cannot be undone!",
             )
           ) {
             return;
@@ -1759,7 +1873,7 @@
             setShoppingList([]);
             addToast(
               "All recipes and related data have been deleted.",
-              "success"
+              "success",
             );
           } catch (error) {
             console.error("Error deleting all data:", error);
@@ -1796,7 +1910,7 @@
               addToast("Failed to add recipe.", "error");
             }
           },
-          [setRecipes, addToast]
+          [setRecipes, addToast],
         );
 
         const updateRecipe = useCallback(
@@ -1809,7 +1923,7 @@
             try {
               await updateItem(STORE_NAMES.RECIPES, id, updatedRecipe);
               setRecipes((prev) =>
-                prev.map((r) => (r.id === id ? updatedRecipe : r))
+                prev.map((r) => (r.id === id ? updatedRecipe : r)),
               );
               setShowAddRecipeModal(false);
               setEditingRecipe(null);
@@ -1819,14 +1933,14 @@
               addToast("Failed to update recipe.", "error");
             }
           },
-          [setRecipes, addToast]
+          [setRecipes, addToast],
         );
 
         const deleteRecipe = useCallback(
           async (id) => {
             if (
               !window.confirm(
-                "Are you sure you want to delete this recipe permanently?"
+                "Are you sure you want to delete this recipe permanently?",
               )
             )
               return;
@@ -1843,7 +1957,7 @@
                     Object.keys(newPlan[day]).forEach((mealTime) => {
                       const currentRecipesInSlot = newPlan[day][mealTime] || [];
                       const updatedRecipesInSlot = currentRecipesInSlot.filter(
-                        (recipeId) => recipeId !== id
+                        (recipeId) => recipeId !== id,
                       );
                       if (
                         updatedRecipesInSlot.length !==
@@ -1859,7 +1973,7 @@
               });
 
               setShoppingList((prev) =>
-                prev.filter((item) => item.recipeId !== id)
+                prev.filter((item) => item.recipeId !== id),
               );
 
               if (showRecipeDetails?.id === id) setShowRecipeDetails(null);
@@ -1875,7 +1989,7 @@
             setShoppingList,
             addToast,
             showRecipeDetails,
-          ]
+          ],
         );
 
         const toggleFavorite = useCallback(
@@ -1893,18 +2007,18 @@
             try {
               await updateItem(STORE_NAMES.RECIPES, id, updatedRecipe);
               setRecipes((prev) =>
-                prev.map((r) => (r.id === id ? updatedRecipe : r))
+                prev.map((r) => (r.id === id ? updatedRecipe : r)),
               );
               addToast(
                 isNowFavorite ? "Added to Favorites" : "Removed from Favorites",
-                "success"
+                "success",
               );
             } catch (error) {
               console.error("Error toggling favorite:", error);
               addToast("Failed to update favorite status.", "error");
             }
           },
-          [recipes, setRecipes, addToast]
+          [recipes, setRecipes, addToast],
         );
 
         const searchRecipes = useCallback(
@@ -1935,6 +2049,26 @@
                 }
               }
 
+              let matchesCourse = true;
+              if (filters.course) {
+                if (filters.course === "_NONE_") {
+                  matchesCourse = !recipe.course || recipe.course.trim() === "";
+                } else {
+                  matchesCourse = recipe.course === filters.course;
+                }
+              }
+
+              let matchesSubCategory = true;
+              if (filters.subCategory) {
+                if (filters.subCategory === "_NONE_") {
+                  matchesSubCategory =
+                    !recipe.subCategory || recipe.subCategory.trim() === "";
+                } else {
+                  matchesSubCategory =
+                    recipe.subCategory === filters.subCategory;
+                }
+              }
+
               let matchesCuisine = true;
               if (filters.cuisine) {
                 if (filters.cuisine === "_NONE_") {
@@ -1952,7 +2086,7 @@
                     !recipe.dietaryTypes || recipe.dietaryTypes.length === 0;
                 } else {
                   matchesDietary = recipe.dietaryTypes?.includes(
-                    filters.dietaryType
+                    filters.dietaryType,
                   );
                 }
               }
@@ -1964,7 +2098,7 @@
                 } else {
                   const normalizedTagQuery = filters.tag.toLowerCase().trim();
                   matchesTag = recipe.tags?.some(
-                    (tag) => tag.toLowerCase() === normalizedTagQuery
+                    (tag) => tag.toLowerCase() === normalizedTagQuery,
                   );
                 }
               }
@@ -1987,6 +2121,8 @@
               return (
                 matchesQuery &&
                 matchesType &&
+                matchesCourse &&
+                matchesSubCategory &&
                 matchesCuisine &&
                 matchesDietary &&
                 matchesTag &&
@@ -1995,7 +2131,7 @@
               );
             });
           },
-          [recipes]
+          [recipes],
         );
 
         const updateMealPlan = useCallback(
@@ -2007,7 +2143,7 @@
 
               if (currentRecipesInSlot.includes(recipeId)) {
                 newPlan[day][mealTime] = currentRecipesInSlot.filter(
-                  (id) => id !== recipeId
+                  (id) => id !== recipeId,
                 );
                 addToast("Recipe removed from meal slot.", "info");
               } else {
@@ -2017,7 +2153,7 @@
               return newPlan;
             });
           },
-          [setMealPlan, addToast]
+          [setMealPlan, addToast],
         );
 
         const removeMealFromPlan = useCallback(
@@ -2027,14 +2163,14 @@
               newPlan[day] = newPlan[day] || {};
               const currentRecipesInSlot = newPlan[day][mealTime] || [];
               const updatedRecipesInSlot = currentRecipesInSlot.filter(
-                (id) => id !== recipeIdToRemove
+                (id) => id !== recipeIdToRemove,
               );
               newPlan[day][mealTime] = updatedRecipesInSlot;
               addToast("Recipe removed from plan.", "success");
               return newPlan;
             });
           },
-          [setMealPlan, addToast]
+          [setMealPlan, addToast],
         );
 
         const addMultipleRecipesToShoppingList = useCallback(
@@ -2055,7 +2191,7 @@
                   recipe.ingredients.length === 0
                 ) {
                   console.warn(
-                    `Recipe ${recipeId} not found or has no ingredients.`
+                    `Recipe ${recipeId} not found or has no ingredients.`,
                   );
                   return;
                 }
@@ -2088,25 +2224,25 @@
               if (totalIngredientsAdded > 0) {
                 addToast(
                   `Added ${totalIngredientsAdded} ingredient(s) from ${recipeNamesAdded.size} recipe(s).`,
-                  "success"
+                  "success",
                 );
               } else if (recipeNamesAdded.size > 0) {
                 addToast(
                   "No ingredients to add from selected recipe(s).",
-                  "info"
+                  "info",
                 );
               }
               return newList;
             });
           },
-          [recipes, setShoppingList, addToast]
+          [recipes, setShoppingList, addToast],
         );
 
         const addToShoppingList = useCallback(
           (recipeId) => {
             addMultipleRecipesToShoppingList([recipeId]);
           },
-          [addMultipleRecipesToShoppingList]
+          [addMultipleRecipesToShoppingList],
         );
 
         const toggleShoppingItem = useCallback(
@@ -2122,11 +2258,11 @@
                 targetNormalizedText = clickedItem.normalizedText;
               } else if (normalizedTextToToggle) {
                 const groupItems = prevList.filter(
-                  (item) => item.normalizedText === normalizedTextToToggle
+                  (item) => item.normalizedText === normalizedTextToToggle,
                 );
                 if (groupItems.length === 0) return prevList;
                 const allCurrentlyChecked = groupItems.every(
-                  (item) => item.checked
+                  (item) => item.checked,
                 );
                 targetChecked = !allCurrentlyChecked;
                 targetNormalizedText = normalizedTextToToggle;
@@ -2142,13 +2278,13 @@
               });
             });
           },
-          [setShoppingList]
+          [setShoppingList],
         );
 
         const clearShoppingList = useCallback(async () => {
           if (
             window.confirm(
-              "Are you sure you want to clear the entire shopping list?"
+              "Are you sure you want to clear the entire shopping list?",
             )
           ) {
             try {
@@ -2246,17 +2382,17 @@
             const recipeName = escapeHTML(recipe.name || "Untitled");
             const recipeDescriptionHtml = recipe.description
               ? `<p style="font-size: 10pt; color: #555; margin-bottom: 20px; text-align: center; font-style: italic;">${escapeHTML(
-                  recipe.description
+                  recipe.description,
                 )}</p>`
               : "";
             const typeHtml = recipe.type
               ? `<p style="font-size: 9pt; color: #777;">Type: ${escapeHTML(
-                  recipe.type
+                  recipe.type,
                 )}</p>`
               : "";
             const cuisineHtml = recipe.cuisine
               ? `<p style="font-size: 9pt; color: #777;">Cuisine: ${escapeHTML(
-                  recipe.cuisine
+                  recipe.cuisine,
                 )}</p>`
               : "";
             const dietaryTypesHtml =
@@ -2279,23 +2415,23 @@
             }
 
             const prepTimeFormatted = formatMinutesToHoursMinutes(
-              recipe.prepTime
+              recipe.prepTime,
             );
             const cookTimeFormatted = formatMinutesToHoursMinutes(
-              recipe.cookTime
+              recipe.cookTime,
             );
             const additionalTimeFormatted = formatMinutesToHoursMinutes(
-              recipe.additionalTime
+              recipe.additionalTime,
             );
             const totalTimeFormatted = formatMinutesToHoursMinutes(
               (recipe.prepTime || 0) +
                 (recipe.cookTime || 0) +
-                (recipe.additionalTime || 0)
+                (recipe.additionalTime || 0),
             );
 
             const yieldHtml = recipe.yield
               ? `<p style="margin: 6px 0;">Yield: ${escapeHTML(
-                  recipe.yield
+                  recipe.yield,
                 )}</p>`
               : "";
 
@@ -2305,8 +2441,8 @@
                     .map(
                       (ing) =>
                         `<li style="margin-bottom: 5px;">${escapeHTML(
-                          ing || ""
-                        )}</li>`
+                          ing || "",
+                        )}</li>`,
                     )
                     .join("")
                 : "<li>No ingredients listed.</li>";
@@ -2317,7 +2453,7 @@
                       (dir, i) =>
                         `<li style="margin-bottom: 12px; padding-left: 5px; border-left: 2px solid #2ecc71;"><strong>Step ${
                           i + 1
-                        }:</strong> ${escapeHTML(dir || "")}</li>`
+                        }:</strong> ${escapeHTML(dir || "")}</li>`,
                     )
                     .join("")
                 : "<li>No directions listed.</li>";
@@ -2328,8 +2464,8 @@
                     .map(
                       (tip) =>
                         `<li style="margin-bottom: 8px; padding-left: 5px; border-left: 2px solid #f59e0b;"><strong>Tip:</strong> ${escapeHTML(
-                          tip || ""
-                        )}</li>`
+                          tip || "",
+                        )}</li>`,
                     )
                     .join("")
                 : "<li>No tips and tricks listed.</li>";
@@ -2418,14 +2554,14 @@
               console.error("PDF Generation Error:", error);
               addToast(
                 `PDF generation failed: ${error.message || "Unknown error"}`,
-                "error"
+                "error",
               );
               if (error.stack) {
                 console.error(error.stack);
               }
             }
           },
-          [addToast]
+          [addToast],
         );
 
         return (
@@ -2447,7 +2583,7 @@
             <main className="flex-grow max-w-7xl mx-auto p-3 sm:p-4 w-full">
               {isLoading ? (
                 <div className="text-center py-10 text-gray-500 dark:text-gray-400">
-                  <i className="fas fa-spinner fa-spin text-4xl mb-3"></i>
+                  <div className="spinner"></div>
                   <p className="text-lg">Loading recipes...</p>
                   <p className="text-sm">
                     This might take a moment if migrating from old storage.
@@ -2565,14 +2701,14 @@
             document.dispatchEvent(
               new CustomEvent("searchRecipes", {
                 detail: { query, type: "search" },
-              })
+              }),
             );
           }, 350);
         }, []);
 
         const handleToggleAllRecipes = useCallback(() => {
           document.dispatchEvent(
-            new CustomEvent("searchRecipes", { detail: { type: "toggleAll" } })
+            new CustomEvent("searchRecipes", { detail: { type: "toggleAll" } }),
           );
           setSearchQuery("");
         }, []);
@@ -2601,7 +2737,7 @@
                   importedRecipes = [rawData];
                 } else {
                   throw new Error(
-                    "Invalid file format: Expected a recipe object or an array of recipes."
+                    "Invalid file format: Expected a recipe object or an array of recipes.",
                   );
                 }
 
@@ -2620,13 +2756,19 @@
                   })
                   .map((recipe, index) => {
                     const uniqueId = `${timestamp.toString(
-                      36
+                      36,
                     )}-${index}-${Math.random().toString(36).substr(2, 5)}`;
                     return {
                       id: uniqueId,
                       name: recipe.name?.trim() || "Untitled Recipe",
                       description: recipe.description?.trim() || "",
                       type: recipe.type?.trim() || "Other",
+                      course:
+                        recipe.course?.trim() || recipe.type?.trim() || "",
+                      subCategory:
+                        recipe.subCategory?.trim() ||
+                        recipe.subcategory?.trim() ||
+                        "",
                       cuisine: recipe.cuisine?.trim() || "",
                       dietaryTypes: Array.isArray(recipe.dietaryTypes)
                         ? recipe.dietaryTypes
@@ -2664,7 +2806,7 @@
                       tipsAndTricks: Array.isArray(recipe.tipsAndTricks)
                         ? recipe.tipsAndTricks
                             .filter(
-                              (tip) => typeof tip === "string" && tip.trim()
+                              (tip) => typeof tip === "string" && tip.trim(),
                             )
                             .map((tip) => tip.trim())
                         : [],
@@ -2698,13 +2840,13 @@
                   await addItem(STORE_NAMES.RECIPES, recipe);
                 }
                 const updatedRecipesFromDB = await getAllItems(
-                  STORE_NAMES.RECIPES
+                  STORE_NAMES.RECIPES,
                 );
                 setRecipes(updatedRecipesFromDB);
 
                 addToast(
                   `Successfully imported ${processedRecipes.length} recipes!`,
-                  "success"
+                  "success",
                 );
               } catch (err) {
                 console.error("Import error:", err);
@@ -2712,7 +2854,7 @@
                   `Error importing recipes: ${
                     err.message || "Invalid file format"
                   }`,
-                  "error"
+                  "error",
                 );
               }
             };
@@ -2768,7 +2910,7 @@
             if (debounceTimeoutRef.current)
               clearTimeout(debounceTimeoutRef.current);
           },
-          []
+          [],
         );
 
         return (
@@ -2942,19 +3084,19 @@
                         className="text-base font-semibold mb-1 line-clamp-1 flex-grow"
                         title={recipe.name}
                       >
-                        {escapeHTML(recipe.name)}
+                        {recipe.name}
                       </h3>
                       {recipe.description && (
                         <p
                           className="text-xs text-gray-500 dark:text-gray-400 mb-1 line-clamp-2"
                           title={recipe.description}
                         >
-                          {escapeHTML(recipe.description)}
+                          {recipe.description}
                         </p>
                       )}
                       <div className="flex justify-between items-center mt-auto pt-1">
                         <span className="inline-block bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 text-xs px-2 py-0.5 rounded-full">
-                          {escapeHTML(recipe.type)}
+                          {recipe.type}
                         </span>
                         <button
                           onClick={(e) => {
@@ -2996,6 +3138,7 @@
         toggleFavorite,
       }) => {
         const [filteredRecipes, setFilteredRecipes] = useState([]);
+        const [tagModal, setTagModal] = useState({ open: false, tag: null });
         const [filters, setFilters] = useState({
           query: "",
           type: "",
@@ -3075,20 +3218,21 @@
               <span className="text-sm font-medium mr-1 hidden md:inline text-gray-700 dark:text-gray-300">
                 Filter:
               </span>
+              {/* Course Filter */}
               <select
-                name="type"
-                value={filters.type}
+                name="course"
+                value={filters.course || ""}
                 onChange={handleFilterChange}
                 className="filter-select text-xs sm:text-sm"
-                aria-label="Filter Meal Type"
+                aria-label="Filter by Course"
               >
-                <option value="">All Types</option>{" "}
-                <option value="_NONE_">No Type</option>
-                {[...new Set(recipes.map((r) => r?.type).filter(Boolean))]
+                <option value="">All Courses</option>
+                <option value="_NONE_">No Course</option>
+                {[...new Set(recipes.map((r) => r?.course).filter(Boolean))]
                   .sort()
-                  .map((t) => (
-                    <option key={t} value={t}>
-                      {t}
+                  .map((c) => (
+                    <option key={c} value={c}>
+                      {c}
                     </option>
                   ))}
               </select>
@@ -3122,7 +3266,7 @@
                   ...new Set(
                     recipes
                       .flatMap((r) => r?.dietaryTypes || [])
-                      .filter(Boolean)
+                      .filter(Boolean),
                   ),
                 ]
                   .sort()
@@ -3132,26 +3276,36 @@
                     </option>
                   ))}
               </select>
+              {/* Sub-Category Filter (dependent on Course) */}
               <select
-                name="tag"
-                value={filters.tag}
+                name="subCategory"
+                value={filters.subCategory || ""}
                 onChange={handleFilterChange}
                 className="filter-select text-xs sm:text-sm"
-                aria-label="Filter by Tag"
+                aria-label="Filter by Sub-Category"
               >
-                <option value="">All Tags</option>{" "}
-                <option value="_NONE_">No Tags</option>
-                {[
-                  ...new Set(
-                    recipes.flatMap((r) => r?.tags || []).filter(Boolean)
-                  ),
-                ]
-                  .sort()
-                  .map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
+                <option value="">All Sub-Categories</option>
+                <option value="_NONE_">No Sub-Category</option>
+                {(() => {
+                  // If a course is selected, only show sub-categories from recipes with that course
+                  let filtered = recipes;
+                  if (filters.course && filters.course !== "_NONE_") {
+                    filtered = recipes.filter(
+                      (r) => r.course === filters.course,
+                    );
+                  }
+                  return [
+                    ...new Set(
+                      filtered.map((r) => r?.subCategory).filter(Boolean),
+                    ),
+                  ]
+                    .sort()
+                    .map((sc) => (
+                      <option key={sc} value={sc}>
+                        {sc}
+                      </option>
+                    ));
+                })()}
               </select>
               <select
                 name="cookTime"
@@ -3194,14 +3348,14 @@
                     onClick={() => openRecipeDetails(recipe)}
                     tabIndex="0"
                     aria-label={`View recipe: ${recipe.name}`}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden cursor-pointer hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-300 flex flex-col group"
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden cursor-pointer hover:shadow-xl hover:bg-green-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 flex flex-col recipe-card card-appear"
                   >
                     <div className="aspect-video w-full bg-gray-200 dark:bg-gray-700 overflow-hidden relative">
                       {recipe.image ? (
                         <img
                           src={recipe.image}
                           alt={recipe.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
@@ -3234,25 +3388,40 @@
                         className="text-base sm:text-lg font-semibold leading-tight mb-1 text-gray-900 dark:text-gray-100 line-clamp-2"
                         title={recipe.name}
                       >
-                        {escapeHTML(recipe.name)}
+                        {recipe.name}
                       </h3>
                       {recipe.description && (
                         <p
                           className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 mb-2 line-clamp-2"
                           title={recipe.description}
                         >
-                          {escapeHTML(recipe.description)}
+                          {recipe.description}
                         </p>
                       )}
+                      {/* Course and Sub-Category display */}
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {recipe.course && (
+                          <span className="inline-flex items-center gap-1 bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300 px-2 py-0.5 rounded-full">
+                            <i className="fas fa-layer-group"></i>{" "}
+                            {recipe.course}
+                          </span>
+                        )}
+                        {recipe.subCategory && (
+                          <span className="inline-flex items-center gap-1 bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-2 py-0.5 rounded-full">
+                            <i className="fas fa-th-list"></i>{" "}
+                            {recipe.subCategory}
+                          </span>
+                        )}
+                      </div>
                       <div className="flex flex-wrap gap-1 my-1 text-xs">
                         <span className="inline-flex items-center gap-1 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-0.5 rounded-full">
                           <i className="fas fa-utensils op-70"></i>{" "}
-                          {escapeHTML(recipe.type)}
+                          {recipe.type}
                         </span>
                         {recipe.cuisine && (
                           <span className="inline-flex items-center gap-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 px-2 py-0.5 rounded-full">
                             <i className="fas fa-globe op-70"></i>{" "}
-                            {escapeHTML(recipe.cuisine)}
+                            {recipe.cuisine}
                           </span>
                         )}
                         {recipe.dietaryTypes?.map((diet) => (
@@ -3260,17 +3429,21 @@
                             key={diet}
                             className="inline-flex items-center gap-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full"
                           >
-                            <i className="fas fa-leaf opacity-70"></i>{" "}
-                            {escapeHTML(diet)}
+                            <i className="fas fa-leaf opacity-70"></i> {diet}
                           </span>
                         ))}
                         {recipe.tags?.map((tag) => (
                           <span
                             key={tag}
-                            className="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full"
+                            className="inline-flex items-center gap-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full tag-hover"
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setTagModal({ open: true, tag });
+                            }}
+                            title={`Show other recipes with tag: ${tag}`}
                           >
-                            <i className="fas fa-tag opacity-70"></i>{" "}
-                            {escapeHTML(tag)}
+                            <i className="fas fa-tag opacity-70"></i> {tag}
                           </span>
                         ))}
                       </div>
@@ -3302,7 +3475,7 @@
                           {formatMinutesToHoursMinutes(
                             parseInt(recipe.prepTime || 0) +
                               parseInt(recipe.cookTime || 0) +
-                              parseInt(recipe.additionalTime || 0)
+                              parseInt(recipe.additionalTime || 0),
                           )}
                         </span>
                       </div>
@@ -3316,21 +3489,88 @@
                     {hideAllExplicitly
                       ? "Recipes are currently hidden."
                       : filters.query
-                      ? "No recipes found matching your search."
-                      : hasActiveFiltersExcludingQuery
-                      ? "No recipes found matching your filters."
-                      : "No recipes added yet."}
+                        ? "No recipes found matching your search."
+                        : hasActiveFiltersExcludingQuery
+                          ? "No recipes found matching your filters."
+                          : "No recipes added yet."}
                   </p>
                   <p className="text-sm">
                     {hideAllExplicitly
                       ? "Click 'All' to show them."
                       : filters.query || hasActiveFiltersExcludingQuery
-                      ? "Try adjusting filters or search terms."
-                      : "Click 'Add' to create your first recipe!"}
+                        ? "Try adjusting filters or search terms."
+                        : "Click 'Add' to create your first recipe!"}
                   </p>
                 </div>
               )}
             </div>
+            {/* Tag Modal */}
+            {tagModal.open && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 modal-fade"
+                onClick={() => setTagModal({ open: false, tag: null })}
+              >
+                <div
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-lg w-full relative modal-fade"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-xl ripple"
+                    onClick={() => setTagModal({ open: false, tag: null })}
+                  >
+                    &times;
+                  </button>
+                  <h2 className="text-lg font-semibold mb-3">
+                    Recipes with tag:{" "}
+                    <span className="text-purple-600 dark:text-purple-300">
+                      {tagModal.tag}
+                    </span>
+                  </h2>
+                  <div className="space-y-2 max-h-80 overflow-y-auto">
+                    {recipes.filter(
+                      (r) => r.tags && r.tags.includes(tagModal.tag),
+                    ).length === 0 ? (
+                      <div className="text-gray-400">
+                        No other recipes found with this tag.
+                      </div>
+                    ) : (
+                      recipes
+                        .filter((r) => r.tags && r.tags.includes(tagModal.tag))
+                        .map((r) => (
+                          <div
+                            key={r.id}
+                            className="p-2 rounded hover:bg-purple-50 dark:hover:bg-purple-900 cursor-pointer flex items-center gap-3"
+                            onClick={() => {
+                              setTagModal({ open: false, tag: null });
+                              openRecipeDetails(r);
+                            }}
+                          >
+                            {r.image ? (
+                              <img
+                                src={r.image}
+                                alt={r.name}
+                                className="w-14 h-14 object-cover rounded shadow"
+                              />
+                            ) : (
+                              <div className="w-14 h-14 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded">
+                                <i className="fas fa-image text-2xl text-gray-400 dark:text-gray-500"></i>
+                              </div>
+                            )}
+                            <div className="flex flex-col flex-1 min-w-0">
+                              <div className="font-medium truncate">
+                                {r.name}
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+                                {r.description}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </section>
         );
       };
@@ -3407,6 +3647,8 @@
             name: "",
             description: "",
             type: "",
+            course: "",
+            subCategory: "",
             cuisine: "",
             dietaryTypes: "",
             prepHours: "",
@@ -3427,7 +3669,7 @@
             image: null,
             video: null,
           }),
-          []
+          [],
         );
         const [formData, setFormData] = useState(initialFormState);
         const [tags, setTags] = useState([]);
@@ -3445,6 +3687,8 @@
               name: editingRecipe.name || "",
               description: editingRecipe.description || "",
               type: editingRecipe.type || "",
+              course: editingRecipe.course || "",
+              subCategory: editingRecipe.subCategory || "",
               cuisine: editingRecipe.cuisine || "",
               dietaryTypes: Array.isArray(editingRecipe.dietaryTypes)
                 ? editingRecipe.dietaryTypes.join(", ")
@@ -3474,12 +3718,12 @@
               video: editingRecipe.video || null,
             });
             setTags(
-              Array.isArray(editingRecipe.tags) ? editingRecipe.tags : []
+              Array.isArray(editingRecipe.tags) ? editingRecipe.tags : [],
             );
             setTipsAndTricks(
               Array.isArray(editingRecipe.tipsAndTricks)
                 ? editingRecipe.tipsAndTricks
-                : []
+                : [],
             );
             setImagePreview(editingRecipe.image || null);
             setVideoPreview(editingRecipe.video || null);
@@ -3500,7 +3744,7 @@
             if (formErrors[name])
               setFormErrors((prev) => ({ ...prev, [name]: null }));
           },
-          [formErrors]
+          [formErrors],
         );
 
         const handleFileChange = useCallback((e) => {
@@ -3607,6 +3851,8 @@
               name: formData.name.trim(),
               description: formData.description.trim(),
               type: formData.type.trim(),
+              course: formData.course.trim(),
+              subCategory: formData.subCategory.trim(),
               cuisine: formData.cuisine.trim(),
               dietaryTypes: formData.dietaryTypes
                 .split(",")
@@ -3615,15 +3861,15 @@
               tags: tags,
               prepTime: calculateTotalMinutes(
                 formData.prepHours,
-                formData.prepMinutes
+                formData.prepMinutes,
               ),
               cookTime: calculateTotalMinutes(
                 formData.cookHours,
-                formData.cookMinutes
+                formData.cookMinutes,
               ),
               additionalTime: calculateTotalMinutes(
                 formData.additionalHours,
-                formData.additionalMinutes
+                formData.additionalMinutes,
               ),
               calories: formData.calories ? parseInt(formData.calories) : null,
               protein: formData.protein ? parseFloat(formData.protein) : null,
@@ -3661,14 +3907,14 @@
             addRecipe,
             updateRecipe,
             addToast,
-          ]
+          ],
         );
 
         const handleOverlayClick = useCallback(
           (e) => {
             if (e.target === e.currentTarget) onClose();
           },
-          [onClose]
+          [onClose],
         );
         const mealTypes = [
           "Appetizers",
@@ -3769,20 +4015,66 @@
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className={`modal-input ${
-                        formErrors.name
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-600"
-                      }`}
+                      className={`modal-input ${formErrors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
                     />
                     <ErrorMessage name="name" />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="course"
+                      className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300"
+                    >
+                      Course *
+                    </label>
+                    <select
+                      id="course"
+                      name="course"
+                      value={formData.course}
+                      onChange={handleChange}
+                      required
+                      className={`modal-input ${formErrors.course ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
+                    >
+                      <option value="">Select a course</option>
+                      <option value="Appetizers">Appetizers</option>
+                      <option value="Beverages">Beverages</option>
+                      <option value="Breads">Breads</option>
+                      <option value="Desserts">Desserts</option>
+                      <option value="Main">Main</option>
+                      <option value="Dressings/Marinades/Sauces/Seasonings">
+                        Dressings/Marinades/Sauces/Seasonings
+                      </option>
+                      <option value="Salads">Salads</option>
+                      <option value="Soups/Stews">Soups/Stews</option>
+                    </select>
+                    <ErrorMessage name="course" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="subCategory"
+                      className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300"
+                    >
+                      Sub-Category *
+                    </label>
+                    <input
+                      type="text"
+                      id="subCategory"
+                      name="subCategory"
+                      value={formData.subCategory}
+                      onChange={handleChange}
+                      required
+                      className={`modal-input ${formErrors.subCategory ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
+                      placeholder="e.g., Pasta, Grilled, Soups and Stews, Baked"
+                    />
+                    <ErrorMessage name="subCategory" />
                   </div>
                   <div>
                     <label
                       htmlFor="type"
                       className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300"
                     >
-                      Type *
+                      Type <span className="text-xs">(optional)</span>
                     </label>
                     <input
                       type="text"
@@ -3791,12 +4083,7 @@
                       value={formData.type}
                       onChange={handleChange}
                       list="meal-types"
-                      required
-                      className={`modal-input ${
-                        formErrors.type
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-600"
-                      }`}
+                      className={`modal-input ${formErrors.type ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
                     />
                     <datalist id="meal-types">
                       {mealTypes.map((t) => (
@@ -4321,7 +4608,7 @@
         ];
         const [selectedDay, setSelectedDay] = useState(days[0]);
         const [selectedMealTime, setSelectedMealTime] = useState(
-          mealTimes[0].id
+          mealTimes[0].id,
         );
 
         const currentRecipesInSlot = useMemo(() => {
@@ -4353,7 +4640,7 @@
           (e) => {
             if (e.target === e.currentTarget) onClose();
           },
-          [onClose]
+          [onClose],
         );
 
         return (
@@ -4422,7 +4709,7 @@
                     {currentRecipesInSlot.length > 0
                       ? currentRecipesInSlot.map((id, index) => {
                           const assignedRecipe = recipes.find(
-                            (r) => r.id === id
+                            (r) => r.id === id,
                           );
                           return (
                             <span key={id} className="block">
@@ -4484,13 +4771,13 @@
             parseInt(recipe?.prepTime || 0) +
             parseInt(recipe?.cookTime || 0) +
             parseInt(recipe?.additionalTime || 0),
-          [recipe]
+          [recipe],
         );
         const handleOverlayClick = useCallback(
           (e) => {
             if (e.target === e.currentTarget) onClose();
           },
-          [onClose]
+          [onClose],
         );
         const scaledYield = useMemo(() => {
           if (recipe.yield) {
@@ -4896,7 +5183,7 @@
                                 onClick={() =>
                                   addTimer(
                                     timeInSeconds,
-                                    `Step ${index + 1}: ${recipe.name}`
+                                    `Step ${index + 1}: ${recipe.name}`,
                                   )
                                 }
                                 className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-xs"
@@ -5028,7 +5315,7 @@
               (r) =>
                 r?.name?.toLowerCase().includes(query) ||
                 r?.type?.toLowerCase().includes(query) ||
-                r?.cuisine?.toLowerCase().includes(query)
+                r?.cuisine?.toLowerCase().includes(query),
             )
             .sort((a, b) => a.name.localeCompare(b.name));
         }, [recipes, selectorSearch]);
@@ -5043,25 +5330,25 @@
               updateMealPlan(
                 showRecipeSelector.day,
                 showRecipeSelector.mealTime,
-                recipeId
+                recipeId,
               );
             }
             setShowRecipeSelector(null);
           },
-          [showRecipeSelector, updateMealPlan]
+          [showRecipeSelector, updateMealPlan],
         );
         const handleRemoveMeal = useCallback(
           (e, day, mealTimeId, recipeIdToRemove) => {
             e.stopPropagation();
             removeMealFromPlan(day, mealTimeId, recipeIdToRemove);
           },
-          [removeMealFromPlan]
+          [removeMealFromPlan],
         );
         const handleOverlayClick = useCallback(
           (e) => {
             if (e.target === e.currentTarget) onClose();
           },
-          [onClose]
+          [onClose],
         );
         const handleSelectorOverlayClick = useCallback((e) => {
           if (e.target === e.currentTarget) setShowRecipeSelector(null);
@@ -5085,7 +5372,7 @@
             });
             return Array.from(recipeIds);
           },
-          [mealPlan]
+          [mealPlan],
         );
 
         const handleAddDayToList = useCallback(
@@ -5095,7 +5382,7 @@
               addMultipleRecipesToShoppingList(recipeIds);
             }
           },
-          [getRecipeIdsForDays, addMultipleRecipesToShoppingList]
+          [getRecipeIdsForDays, addMultipleRecipesToShoppingList],
         );
 
         const handleAddWeekToList = useCallback(() => {
@@ -5172,7 +5459,7 @@
                                   {recipeIdsInSlot.length > 0 ? (
                                     recipeIdsInSlot.map((recipeId) => {
                                       const recipe = recipes.find(
-                                        (r) => r?.id === recipeId
+                                        (r) => r?.id === recipeId,
                                       );
                                       return (
                                         <div
@@ -5186,7 +5473,7 @@
                                             }
                                           >
                                             {escapeHTML(
-                                              recipe?.name || "Unknown Recipe"
+                                              recipe?.name || "Unknown Recipe",
                                             )}
                                           </p>
                                           <button
@@ -5195,7 +5482,7 @@
                                                 e,
                                                 day,
                                                 id,
-                                                recipeId
+                                                recipeId,
                                               )
                                             }
                                             className="text-red-400 hover:text-red-600 text-xs absolute top-0 right-0 bg-white dark:bg-gray-700 rounded-full w-4 h-4 flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
@@ -5236,7 +5523,7 @@
                         {showRecipeSelector?.day}{" "}
                         {
                           mealTimes.find(
-                            (mt) => mt.id === showRecipeSelector?.mealTime
+                            (mt) => mt.id === showRecipeSelector?.mealTime,
                           )?.label
                         }
                       </span>
@@ -5342,7 +5629,7 @@
           });
           Object.values(groups).forEach((group) => {
             group.items.sort((a, b) =>
-              a.originalText.localeCompare(b.originalText)
+              a.originalText.localeCompare(b.originalText),
             );
           });
           return groups;
@@ -5379,7 +5666,7 @@
             }
             normalizedDetails[norm].originalItems.push(item);
             normalizedDetails[norm].recipeSources.add(
-              item.recipeName || "Manually Added"
+              item.recipeName || "Manually Added",
             );
             normalizedDetails[norm].instanceCount++;
             if (!item.checked) normalizedDetails[norm].uncheckedCount++;
@@ -5405,7 +5692,7 @@
 
         const commonNormalizedTexts = useMemo(() => {
           return new Set(
-            commonIngredientsData.map((item) => item.normalizedText)
+            commonIngredientsData.map((item) => item.normalizedText),
           );
         }, [commonIngredientsData]);
 
@@ -5417,7 +5704,7 @@
                 ? group.items
                 : group.items.filter((item) => !item.checked)
               ).filter(
-                (item) => !commonNormalizedTexts.has(item.normalizedText)
+                (item) => !commonNormalizedTexts.has(item.normalizedText),
               ),
             }))
             .filter((group) => group.items.length > 0)
@@ -5443,14 +5730,14 @@
             const { value, unit: convertedUnit } = convertUnits(
               item.quantity,
               item.unit,
-              displayUnitSystem
+              displayUnitSystem,
             );
             const displayQuantity = value !== null ? formatQuantity(value) : "";
             const displayUnit = convertedUnit || "";
             const displayIngredient =
               `${displayQuantity} ${displayUnit} ${item.description}`.trim();
             outputGroups[recipeName].push(
-              `${item.checked ? "[x]" : "[ ]"} ${displayIngredient}`
+              `${item.checked ? "[x]" : "[ ]"} ${displayIngredient}`,
             );
           });
           const sortedGroupNames = Object.keys(outputGroups).sort((a, b) => {
@@ -5496,25 +5783,25 @@
           (itemId) => {
             toggleShoppingItem(itemId, null);
           },
-          [toggleShoppingItem]
+          [toggleShoppingItem],
         );
         const handleToggleCommonItem = useCallback(
           (normalizedText) => {
             toggleShoppingItem(null, normalizedText);
           },
-          [toggleShoppingItem]
+          [toggleShoppingItem],
         );
         const handleOverlayClick = useCallback(
           (e) => {
             if (e.target === e.currentTarget) onClose();
           },
-          [onClose]
+          [onClose],
         );
         const handleClearList = useCallback(() => {
           if (
             shoppingList.length > 0 &&
             window.confirm(
-              "Are you sure you want to clear the entire shopping list? This cannot be undone."
+              "Are you sure you want to clear the entire shopping list? This cannot be undone.",
             )
           ) {
             clearShoppingList();
@@ -5525,7 +5812,7 @@
 
         const totalUncheckedItems = useMemo(
           () => shoppingList.filter((item) => !item.checked).length,
-          [shoppingList]
+          [shoppingList],
         );
 
         return (
@@ -5616,7 +5903,7 @@
                             const { value, unit: convertedUnit } = convertUnits(
                               item.quantity,
                               item.unit,
-                              displayUnitSystem
+                              displayUnitSystem,
                             );
                             const displayQuantity =
                               value !== null ? formatQuantity(value) : "";
@@ -5684,7 +5971,7 @@
                                     convertUnits(
                                       item.quantity,
                                       item.unit,
-                                      displayUnitSystem
+                                      displayUnitSystem,
                                     );
                                   const displayQuantity =
                                     value !== null ? formatQuantity(value) : "";
